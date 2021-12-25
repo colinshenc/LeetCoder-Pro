@@ -1,0 +1,63 @@
+import fetch from 'node-fetch'
+
+async function getSubmissionByName(questionSlug) {
+    var json = await fetch("https://leetcode.com/graphql", {
+        "credentials": "include",
+        "headers": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
+            "Accept": "*/*",
+            "Accept-Language": "en-US,en;q=0.5",
+            "content-type": "application/json",
+            "x-csrftoken": "VfiKi76Nh60YKkgLIjKdRj40vUjmwon0AiAqHvRrOuXijM1kzOiLoF1gBVzirc83",
+            "Sec-Fetch-Dest": "empty",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Site": "same-origin",
+            "Cookie": "csrftoken=Rkg99BfyDgIaamxO8wvxUfgKuhIzCflIGusAMCrgzqIwqYRcumEwK6whLAeU7pJs; LEETCODE_SESSION=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfYXV0aF91c2VyX2lkIjoiNTQ1MTc4OSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiN2JlNWNhMmRkMWYyZmI3Zjc3ZDcxOTI1OTZjMDM1M2Y3NWYwYWRjNSIsImlkIjo1NDUxNzg5LCJlbWFpbCI6InR3YWRkd2FAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0d2FkZHdhIiwidXNlcl9zbHVnIjoidHdhZGR3YSIsImF2YXRhciI6Imh0dHBzOi8vd3d3LmdyYXZhdGFyLmNvbS9hdmF0YXIvODEwOWRkMmE3ZmY1M2Q0ZjY5MzE4ODc5ZDM0OTI0YjgucG5nP3M9MjAwIiwicmVmcmVzaGVkX2F0IjoxNjQwNDMwODIyLCJpcCI6IjEwNy4xODIuMjIuNTMiLCJpZGVudGl0eSI6ImNiYTEwMzBmNDRlYjRiYTQ1NjhiZjQ1YzI1NDAyMjhjIiwic2Vzc2lvbl9pZCI6MTYwMDM3NzYsIl9zZXNzaW9uX2V4cGlyeSI6MTIwOTYwMH0.DL-aOkKbYcj9YWFiN-NKBoQ1MJUYRRZesd0jmklytlo",
+            // "Cookie": "csrftoken=VfiKi76Nh60YKkgLIjKdRj40vUjmwon0AiAqHvRrOuXijM1kzOiLoF1gBVzirc83; LEETCODE_SESSION=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50X3ZlcmlmaWVkX2VtYWlsIjpudWxsLCJhY2NvdW50X3VzZXIiOiIzOHVtbCIsIl9hdXRoX3VzZXJfaWQiOiI1NDUxNzg5IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiYWxsYXV0aC5hY2NvdW50LmF1dGhfYmFja2VuZHMuQXV0aGVudGljYXRpb25CYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiN2JlNWNhMmRkMWYyZmI3Zjc3ZDcxOTI1OTZjMDM1M2Y3NWYwYWRjNSIsImlkIjo1NDUxNzg5LCJlbWFpbCI6InR3YWRkd2FAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0d2FkZHdhIiwidXNlcl9zbH…ZGVudGl0eSI6ImNiYTEwMzBmNDRlYjRiYTQ1NjhiZjQ1YzI1NDAyMjhjIiwic2Vzc2lvbl9pZCI6MTU5MDUwMzN9.I9bRdIlcmSht-K-J2uvQZfYBo8ZjaS-RG350-d3G544; messages=\"ed599557b427d70e65f132c1e374f6bacfdb8ecb$[[\"__json_message\"\0540\05420\054\"Confirmation e-mail sent to twaddwa@gmail.com.\"]\054[\"__json_message\"\0540\05425\054\"Successfully signed in as twaddwa.\"]\054[\"__json_message\"\0540\05425\054\"You have confirmed twaddwa@gmail.com.\"]]\"; NEW_PROBLEMLIST_PAGE=1; c_a_u=\"dHdhZGR3YQ==:1n12i7:R5co2EKHOEAyP1jJC3ur8FL539w\""
+            // "Cookie": "csrftoken=VfiKi76Nh60YKkgLIjKdRj40vUjmwon0AiAqHvRrOuXijM1kzOiLoF1gBVzirc83; LEETCODE_SESSION=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50X3ZlcmlmaWVkX2VtYWlsIjpudWxsLCJhY2NvdW50X3VzZXIiOiIzOHVtbCIsIl9hdXRoX3VzZXJfaWQiOiI1NDUxNzg5IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiYWxsYXV0aC5hY2NvdW50LmF1dGhfYmFja2VuZHMuQXV0aGVudGljYXRpb25CYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiN2JlNWNhMmRkMWYyZmI3Zjc3ZDcxOTI1OTZjMDM1M2Y3NWYwYWRjNSIsImlkIjo1NDUxNzg5LCJlbWFpbCI6InR3YWRkd2FAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0d2FkZHdhIiwidXNlcl9zbH…ZGVudGl0eSI6ImNiYTEwMzBmNDRlYjRiYTQ1NjhiZjQ1YzI1NDAyMjhjIiwic2Vzc2lvbl9pZCI6MTU5MDUwMzN9.I9bRdIlcmSht-K-J2uvQZfYBo8ZjaS-RG350-d3G544; messages=\"ed599557b427d70e65f132c1e374f6bacfdb8ecb$[[\"__json_message\"\0540\05420\054\"Confirmation e-mail sent to twaddwa@gmail.com.\"]\054[\"__json_message\"\0540\05425\054\"Successfully signed in as twaddwa.\"]\054[\"__json_message\"\0540\05425\054\"You have confirmed twaddwa@gmail.com.\"]]\"; NEW_PROBLEMLIST_PAGE=1; c_a_u=\"dHdhZGR3YQ==:1n12i7:R5co2EKHOEAyP1jJC3ur8FL539w\""
+        },
+        "referrer": "https://leetcode.com/problems/two-sum/submissions/",
+        "body": "{\"operationName\":\"Submissions\",\"variables\":{\"offset\":0,\"limit\":20,\"lastKey\":null,\"questionSlug\":\"two-sum\"},\"query\":\"query Submissions($offset: Int!, $limit: Int!, $lastKey: String, $questionSlug: String!) {\\n  submissionList(offset: $offset, limit: $limit, lastKey: $lastKey, questionSlug: $questionSlug) {\\n    lastKey\\n    hasNext\\n    submissions {\\n      id\\n      statusDisplay\\n      lang\\n      runtime\\n      timestamp\\n      url\\n      isPending\\n      memory\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n\"}",
+        "method": "POST",
+        "mode": "cors"
+    }).then(response => response.json());
+
+    return json;
+}
+
+async function getUserAllProblemStatus() {
+
+    // var csrftoken = getCookieValue('csrftoken');
+    // var leetcode_session = getCookieValue('LEETCODE_SESSION');
+
+    var json = await fetch("https://leetcode.com/api/problems/algorithms/", {
+        "method": "GET",
+        "mode": "cors",
+        "credentials": "include",
+        "headers": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Cookie": "csrftoken=Rkg99BfyDgIaamxO8wvxUfgKuhIzCflIGusAMCrgzqIwqYRcumEwK6whLAeU7pJs; LEETCODE_SESSION=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfYXV0aF91c2VyX2lkIjoiNTQ1MTc4OSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiN2JlNWNhMmRkMWYyZmI3Zjc3ZDcxOTI1OTZjMDM1M2Y3NWYwYWRjNSIsImlkIjo1NDUxNzg5LCJlbWFpbCI6InR3YWRkd2FAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0d2FkZHdhIiwidXNlcl9zbHVnIjoidHdhZGR3YSIsImF2YXRhciI6Imh0dHBzOi8vd3d3LmdyYXZhdGFyLmNvbS9hdmF0YXIvODEwOWRkMmE3ZmY1M2Q0ZjY5MzE4ODc5ZDM0OTI0YjgucG5nP3M9MjAwIiwicmVmcmVzaGVkX2F0IjoxNjQwNDMwODIyLCJpcCI6IjEwNy4xODIuMjIuNTMiLCJpZGVudGl0eSI6ImNiYTEwMzBmNDRlYjRiYTQ1NjhiZjQ1YzI1NDAyMjhjIiwic2Vzc2lvbl9pZCI6MTYwMDM3NzYsIl9zZXNzaW9uX2V4cGlyeSI6MTIwOTYwMH0.DL-aOkKbYcj9YWFiN-NKBoQ1MJUYRRZesd0jmklytlo",
+        },
+    }).then(response => response.json());
+
+    // rebuild json with question_id as key for faster lookup
+    var newJson = {};
+    for(var i = 0; i < json['stat_status_pairs'].length; i++) {
+        var problem = json['stat_status_pairs'][i];
+        newJson[problem['stat']['question_id'].toString()] = problem;
+    }
+
+    return newJson;
+}
+
+// let json = await getSubmissionJSON('two-sum')
+// console.log(json['data']['submissionList'])
+
+let json = await getUserAllProblemStatus()
+console.log(json)
