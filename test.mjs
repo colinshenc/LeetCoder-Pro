@@ -23,7 +23,6 @@ async function getSubmissionById(questionId) {
             "Accept": "*/*",
             "Accept-Language": "en-US,en;q=0.5",
             "content-type": "application/json",
-            "x-csrftoken": "VfiKi76Nh60YKkgLIjKdRj40vUjmwon0AiAqHvRrOuXijM1kzOiLoF1gBVzirc83",
             "Sec-Fetch-Dest": "empty",
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-origin",
