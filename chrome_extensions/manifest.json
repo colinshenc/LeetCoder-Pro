@@ -1,0 +1,19 @@
+{
+  "name": "LeetCode Extension",
+  "description": "LeetCode Extension",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "/images/LeetCode_logo_shrink.png"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+L",
+        "mac": "MacCtrl+Shift+L"
+      },
+      "description": "Open popup.html"
+    }
+  }
+}
