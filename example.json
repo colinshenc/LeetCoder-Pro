@@ -1,0 +1,39 @@
+{
+  "1": [
+    {
+      "id": "605309170",
+      "statusDisplay": "Accepted",
+      "lang": "python3",
+      "runtime": "824 ms",
+      "timestamp": "1640145190",
+      "url": "/submissions/detail/605309170/",
+      "isPending": "Not Pending",
+      "memory": "14.9 MB",
+      "__typename": "SubmissionDumpNode"
+    },
+    {
+      "id": "605308685",
+      "statusDisplay": "Wrong Answer",
+      "lang": "python3",
+      "runtime": "N/A",
+      "timestamp": "1640145119",
+      "url": "/submissions/detail/605308685/",
+      "isPending": "Not Pending",
+      "memory": "N/A",
+      "__typename": "SubmissionDumpNode"
+    }
+  ],
+  "9": [
+    {
+      "id": "606462590",
+      "statusDisplay": "Accepted",
+      "lang": "python3",
+      "runtime": "68 ms",
+      "timestamp": "1640348500",
+      "url": "/submissions/detail/606462590/",
+      "isPending": "Not Pending",
+      "memory": "14.2 MB",
+      "__typename": "SubmissionDumpNode"
+    }
+  ]
+}
