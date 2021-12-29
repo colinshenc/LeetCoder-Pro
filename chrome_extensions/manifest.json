@@ -7,6 +7,21 @@
     "default_popup": "popup.html",
     "default_icon": "/images/LeetCode_logo_shrink.png"
   },
+  "host_permissions": [
+    "*://*.leetcode.com/"
+  ],
+  "permissions": [
+    "cookies"
+  ],
+  "background": {
+    "service_worker": "utils.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.leetcode.com/problemset/*"],
+      "js": ["submission.js"]
+    }
+  ],
   "commands": {
     "_execute_action": {
       "suggested_key": {
