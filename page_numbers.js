@@ -1,3 +1,8 @@
+/**
+ * DO NOT USE THE METHODS IN THIS FILE.USE "get_questions_on_currrent_page.js" INSTEAD.
+ * ---CHENG SHEN
+*/
+
 //number of question per page
 var temp = document.querySelector("#headlessui-listbox-button-12").textContent;
 var num = temp.substr(0, temp.indexOf("/") - 1);
