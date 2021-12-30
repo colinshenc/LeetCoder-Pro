@@ -1,4 +1,4 @@
-// import data_num_sessions from SOMEWHERE
+import { data_num_sessions, data_acceptance } from "./parse_ts.js";
 
 /**
  * Script to change Status column to corresponding session count number.
@@ -13,11 +13,16 @@ var problems_table = document.querySelector("div[role='rowgroup']");
 var problems_rows = problems_table.querySelectorAll("div[role='row']");
 
 /**
- * Function to manipulate Status column for each row.
+ * Function to manipulate Status column.
  *
+ * For each row:
  * 1. Check if current problem is accepted
  * 2. If accepted, check if current problem is in DATA IMPORTED
- * 3. If is in, replace "Status" column `svg` with session count number following "Acceptance" column class styles
+ * 3. If is in,
+ * 3-1. replace "Status" column value with session count number
+ * 3-2. add "Your Acceptance" column value
+ * 4. If not in, add empty "Your Acceptance" column value
+ * 5. Add `Your Acceptance` new column name
  *
  * Future update:
  * 1. Construct https://developer.mozilla.org/en-US/docs/Web/API/NodeList live `NodeList` and update when expanding # of problems,
@@ -29,7 +34,6 @@ var each_row = function (row_element_nodes) {
   // var problem_acceptance = row_element_nodes[3].childNodes[0];
 
   // Check if accepted
-  //   var is_accepted = problem_status.classList.contains(".text-green-s") != null;
   var is_accepted = problem_status.classList.contains("text-green-s");
   var current_problem = null;
 
@@ -42,17 +46,19 @@ var each_row = function (row_element_nodes) {
 
   // Check if in DATA IMPORTED
   var session_count = null;
-  // After data imported: if (current_problem != null && current_problem in DATA_IMPORTED) {
-  if (current_problem != null && current_problem == "1") {
-    // Problem set to "1" by default
-    // After data imported: session_count = QUERY_SESSEION_COUNT;
-    session_count = 11;
+  if (
+    current_problem != null &&
+    Object.keys(data_num_sessions).includes(current_problem)
+  ) {
+    session_count = data_num_sessions[parseInt(current_problem)];
   }
 
   // Replace "Status" column
   if (session_count != null) {
     const session_count_item = document.createElement("span");
-    session_count_item.innerHTML = `<span>${session_count}</span>`;
+    session_count_item.innerHTML = `&#x2713 ${session_count}`;
+    session_count_item.classList.add("text-olive");
+    session_count_item.classList.add("dark:text-dark-olive");
 
     problem_status.replaceWith(session_count_item);
   }

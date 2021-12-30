@@ -1,6 +1,6 @@
 //templatea JSON data.
 var data = `{
-	"322":[
+	"2":[
 		{
 			"id":"604919532",
 			"statusDisplay":"Accepted",
@@ -97,8 +97,8 @@ const get_num_sessions = (data) => {
   }
   return result;
 };
-//console.log("a");
-console.log(get_num_sessions(data));
+
+const data_num_sessions = get_num_sessions(data);
 
 /**
  * Input JSON string-submissions data. Output map with key as question number, value as acceptance rate.
@@ -120,4 +120,6 @@ const get_acc_rate = (data) => {
   }
   return result;
 };
-console.log(get_acc_rate(data));
+
+const data_acceptance = get_acc_rate(data);
+export { data_num_sessions, data_acceptance };
