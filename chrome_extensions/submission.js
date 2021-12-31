@@ -1,11 +1,28 @@
 // this file runs on the web page and cannot access chrome.cookie api
+//console.log("HERE");
+
+chrome.storage.sync.get('buttonState', function (data) {
+    console.log('buttonState', data);
+    if (data['buttonState'] == 1) {
+        var btn = document.createElement("BUTTON")
+        var t = document.createTextNode("CLICK ME");
+        btn.appendChild(t);
+        //Appending to DOM 
+        document.body.appendChild(btn);
+    }
+    chrome.tabs.query({ url: "https://leetcode.com/problemset/*" }, function (tab) {
+        chrome.tabs.update(tab[0].id)
+    })
+})
+
+
 
 var allProblemStatus = null;
 
 // wrapper to get cookie value
 async function getCookieValue(cookieName) {
     return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage(chrome.runtime.id, {name: cookieName}, (response) => {
+        chrome.runtime.sendMessage(chrome.runtime.id, { name: cookieName }, (response) => {
             if (response) {
                 resolve(response);
             } else {
@@ -23,7 +40,7 @@ async function getSubmissionById(questionId) {
     if (allProblemStatus == null) {
         allProblemStatus = await getUserAllProblemStatus()
     }
-    if(allProblemStatus[questionId.toString()]['status'] == null) {
+    if (allProblemStatus[questionId.toString()]['status'] == null) {
         return [];
     }
 
@@ -73,7 +90,7 @@ async function getUserAllProblemStatus() {
 
     // rebuild json with question_id as key for faster lookup
     var newJson = {};
-    for(var i = 0; i < json['stat_status_pairs'].length; i++) {
+    for (var i = 0; i < json['stat_status_pairs'].length; i++) {
         var problem = json['stat_status_pairs'][i];
         newJson[problem['stat']['question_id'].toString()] = problem;
     }
@@ -87,11 +104,11 @@ async function getSubmissions(submissionIds) {
         allProblemStatus = await getUserAllProblemStatus();
     }
 
-    var json = {} 
-    for(var i = 0; i < submissionIds.length; i++) {
+    var json = {}
+    for (var i = 0; i < submissionIds.length; i++) {
         var questionId = submissionIds[i];
         // only handle problems with submission status
-        if(allProblemStatus[questionId.toString()]['status'] != null) {
+        if (allProblemStatus[questionId.toString()]['status'] != null) {
             json[submissionIds[i].toString()] = await getSubmissionById(submissionIds[i]);
         }
     }
