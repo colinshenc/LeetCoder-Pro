@@ -1,6 +1,6 @@
 // Initialize button to based on storage value
-
 chrome.storage.sync.get('buttonState', function (data) {
+  let button = document.getElementById("switch");
   console.log('buttonState', data);
   if (data['buttonState'] == 1) {
      button.innerHTML = "ON";
@@ -10,9 +10,9 @@ chrome.storage.sync.get('buttonState', function (data) {
   }
 })
 
-
+// Add listener for button
 document.addEventListener('DOMContentLoaded', function() {
-  var button = document.getElementById("switch");
+  let button = document.getElementById("switch");
   var isExtensionOn = 0;
   var obj = {}
   button.addEventListener("click", function() {
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
       button.innerHTML = "ON";
       isExtensionOn = 1;
     }
-    chrome.storage.sync.set({"buttonState": isExtensionOn}, function() {
+    chrome.storage.sync.set({'buttonState': isExtensionOn}, function() {
       console.log('Status saved');
     })
   
