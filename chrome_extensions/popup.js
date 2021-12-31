@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var button = document.getElementById("switch");
   var isExtensionOn = 0;
   var obj = {}
-  button.addEventListener("load", function() {
+  button.addEventListener("click", function() {
     if (button.innerHTML == "ON") {
       button.innerHTML = "OFF";
       isExtensionOn = 0;
