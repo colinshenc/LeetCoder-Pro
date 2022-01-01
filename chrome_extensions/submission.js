@@ -98,16 +98,15 @@ async function getSubmissions(submissionIds) {
   }
 
   var json = {};
-  for (var i = 0; i < submissionIds.length; i++) {
-    var questionId = submissionIds[i];
-    // only handle problems with submission status
-    if (allProblemStatus[questionId.toString()]["status"] != null) {
-      json[submissionIds[i].toString()] = await getSubmissionById(
-        submissionIds[i]
-      );
+
+  promises = []
+  submissionIds.forEach((e) => {
+    if (allProblemStatus[e.toString()]["status"] != null) {
+      promises.push(getSubmissionById(e).then(data => json[e.toString()] = data));
     }
-  }
-  return json;
+  })
+
+  return Promise.all(promises);
 }
 
 /**
