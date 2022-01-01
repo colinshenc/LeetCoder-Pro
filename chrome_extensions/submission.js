@@ -34,7 +34,8 @@ async function getSubmissionById(questionId) {
     credentials: "include",
     headers: {
       "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
+        // "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
+        window.navigator.userAgent,
       Accept: "*/*",
       "Accept-Language": "en-US,en;q=0.5",
       "content-type": "application/json",
@@ -74,7 +75,8 @@ async function getUserAllProblemStatus() {
     credentials: "include",
     headers: {
       "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
+        // "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
+        window.navigator.userAgent,
       Accept:
         "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
       "Accept-Language": "en-US,en;q=0.5",
