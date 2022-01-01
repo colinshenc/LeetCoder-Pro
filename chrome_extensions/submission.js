@@ -26,9 +26,6 @@ async function getSubmissionById(questionId) {
   if (allProblemStatus == null) {
     allProblemStatus = await getUserAllProblemStatus();
   }
-  if (allProblemStatus[questionId.toString()]["status"] == null) {
-    return [];
-  }
 
   var questionSlug =
     allProblemStatus[questionId.toString()]["stat"]["question__title_slug"];
@@ -54,7 +51,15 @@ async function getSubmissionById(questionId) {
       '"},"query":"query Submissions($offset: Int!, $limit: Int!, $lastKey: String, $questionSlug: String!) {\\n  submissionList(offset: $offset, limit: $limit, lastKey: $lastKey, questionSlug: $questionSlug) {\\n    lastKey\\n    hasNext\\n    submissions {\\n      id\\n      statusDisplay\\n      lang\\n      runtime\\n      timestamp\\n      url\\n      isPending\\n      memory\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n"}',
     method: "POST",
     mode: "cors",
-  }).then((response) => response.json());
+  }).then((response) => {
+    if(response.ok) {
+      return response.json()
+    } else {
+      console.log(response.statusText);
+      // if request failed, resubmit same request
+      return getSubmissionById(questionId);
+    }
+  });
 
   return json["data"]["submissionList"]["submissions"];
 }
@@ -82,11 +87,11 @@ async function getUserAllProblemStatus() {
     },
   }).then((response) => response.json());
 
-  // rebuild json with question_id as key for faster lookup
+  // rebuild json with frontend_question_id as key for faster lookup
   var newJson = {};
   for (var i = 0; i < json["stat_status_pairs"].length; i++) {
     var problem = json["stat_status_pairs"][i];
-    newJson[problem["stat"]["question_id"].toString()] = problem;
+    newJson[problem["stat"]["frontend_question_id"].toString()] = problem;
   }
 
   return newJson;
@@ -98,10 +103,9 @@ async function getSubmissions(submissionIds) {
   }
 
   var json = {};
-
   promises = []
   submissionIds.forEach((e) => {
-    if (allProblemStatus[e.toString()]["status"] != null) {
+    if ((e in allProblemStatus) && allProblemStatus[e.toString()]["status"] != null) {
       promises.push(getSubmissionById(e).then(data => json[e.toString()] = data));
     }
   })
