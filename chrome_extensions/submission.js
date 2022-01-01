@@ -19,6 +19,7 @@ async function getCookieValue(cookieName) {
   });
 }
 
+// get submission history of a problem by its id
 async function getSubmissionById(questionId) {
   var csrftoken = await getCookieValue("csrftoken");
   var leetcode_session = await getCookieValue("LEETCODE_SESSION");
@@ -30,11 +31,11 @@ async function getSubmissionById(questionId) {
   var questionSlug =
     allProblemStatus[questionId.toString()]["stat"]["question__title_slug"];
 
+  // make http request to get the submission history json
   var json = await fetch("https://leetcode.com/graphql", {
     credentials: "include",
     headers: {
       "User-Agent":
-        // "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
         window.navigator.userAgent,
       Accept: "*/*",
       "Accept-Language": "en-US,en;q=0.5",
@@ -65,6 +66,8 @@ async function getSubmissionById(questionId) {
   return json["data"]["submissionList"]["submissions"];
 }
 
+// get user's all problems status
+// from https://leetcode.com/api/problems/algorithms/
 async function getUserAllProblemStatus() {
   var csrftoken = await getCookieValue("csrftoken");
   var leetcode_session = await getCookieValue("LEETCODE_SESSION");
@@ -75,7 +78,6 @@ async function getUserAllProblemStatus() {
     credentials: "include",
     headers: {
       "User-Agent":
-        // "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
         window.navigator.userAgent,
       Accept:
         "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -99,6 +101,7 @@ async function getUserAllProblemStatus() {
   return newJson;
 }
 
+// get the submission information from a list of question ids
 async function getSubmissions(submissionIds) {
   if (allProblemStatus == null) {
     allProblemStatus = await getUserAllProblemStatus();
