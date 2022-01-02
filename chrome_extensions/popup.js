@@ -35,7 +35,9 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       else {
         console.log("Page reloaded");
-        chrome.tabs.reload(tab[0].id);
+        for (var i = 0; i < tab.length;i++) {
+          chrome.tabs.reload(tab[i].id);
+        }
       }
     })
   });
