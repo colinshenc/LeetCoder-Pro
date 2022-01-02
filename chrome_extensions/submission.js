@@ -127,7 +127,8 @@ async function getSubmissions(submissionIds) {
     }
   })
 
-  return Promise.all(promises);
+  await Promise.all(promises);
+  return json;
 }
 
 /**
