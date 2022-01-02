@@ -19,7 +19,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.leetcode.com/problemset/*"],
-      "js": ["submission.js"],
+      "js": ["submission.js", "page_injection.js", "parse_ts.js", "manipulate_page.js"],
       "run_at": "document_end"
     }
   ],
