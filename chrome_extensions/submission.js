@@ -182,14 +182,6 @@ const get_acc_rate = (json_data) => {
 //export { data_num_sessions, data_acceptance };
 
 /**
- * Column name modifications.
- *
- * Columns:
- * 1. new "Your Acceptance"
- * 2. "Acceptance" -> "Public Acceptance"
- */
-
-/**
  * Script to change Status column to corresponding session count number.
  *
  * Status class notes:
@@ -197,10 +189,26 @@ const get_acc_rate = (json_data) => {
  * * Error: text-yellow
  * * Not attempted: text-gray-5
  */
+
+/**
+ * Column name modifications.
+ *
+ * Columns:
+ * 1. "Status" -> "Status/# of Sess."
+ * 2. new "Your Acceptance"
+ * 3. "Acceptance" -> "Public Acceptance"
+ */
 var colnames = function (problems_colnames) {
+  var colname_status = problems_colnames.childNodes[0];
   var colname_title = problems_colnames.childNodes[1];
   var colname_accept = problems_colnames.childNodes[4];
   var colname_frequency = problems_colnames.childNodes[5];
+
+  // "Status/# of Sess."
+  colname_status.innerHTML = colname_status.innerHTML.replace(
+    "Status",
+    "Status/# of Sess."
+  );
 
   // "Your Acceptance"
   var colname_your_accept = colname_frequency.cloneNode(true);
@@ -275,7 +283,9 @@ var eachRow = function (row_element_nodes, data_num_sessions, data_acceptance) {
   const your_accept_element = problem_frequency.cloneNode(true);
   if (accept_value != null) {
     const accept_value_float = parseFloat(accept_value) * 100;
-    your_accept_element.childNodes[0].innerHTML = `<span>${accept_value_float}%</span>`;
+    your_accept_element.childNodes[0].innerHTML = `<span>${parseInt(
+      accept_value_float
+    )}%</span>`;
   } else {
     your_accept_element.childNodes[0].innerHTML = `<span>N/A</span>`;
   }
