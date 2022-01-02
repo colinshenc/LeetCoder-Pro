@@ -24,14 +24,20 @@ document.addEventListener('DOMContentLoaded', function () {
       button.innerHTML = "ON";
       isExtensionOn = 1;
     }
-    chrome.tabs.query({url: "https://leetcode.com/problemset/*" }, function (tab) {
-      console.log("Page reloaded");
-      chrome.tabs.reload(tab[0].id)
-    })
     chrome.storage.sync.set({ 'buttonState': isExtensionOn }, function () {
       console.log('Status saved');
     })
-
+    chrome.tabs.query({url: "*://*.leetcode.com/*" }, function (tab) {
+      // If the page is not opened
+      console.log(tab);
+      if (tab[0] == null) {
+        console.log("Not found in opened tabs");
+      }
+      else {
+        console.log("Page reloaded");
+        chrome.tabs.reload(tab[0].id);
+      }
+    })
   });
 })
 
