@@ -67,8 +67,8 @@ async function getSubmissionById(frontendId) {
       if(response.ok) {
         return response.json();
       } else {
-        console.log(questionId + " request 429");
-          return await makeRequest();
+        console.log(frontendId + " request 429");
+        return await makeRequest();
       }
     })
   };
