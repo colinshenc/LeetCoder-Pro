@@ -32,37 +32,41 @@ async function getSubmissionById(questionId) {
     allProblemStatus[questionId.toString()]["stat"]["question__title_slug"];
 
   // make http request to get the submission history json
-  var json = await fetch("https://leetcode.com/graphql", {
-    credentials: "include",
-    headers: {
-      "User-Agent":
-        window.navigator.userAgent,
-      Accept: "*/*",
-      "Accept-Language": "en-US,en;q=0.5",
-      "content-type": "application/json",
-      "Sec-Fetch-Dest": "empty",
-      "Sec-Fetch-Mode": "cors",
-      "Sec-Fetch-Site": "same-origin",
-      Cookie:
-        "csrftoken=" + csrftoken + "; LEETCODE_SESSION=" + leetcode_session,
-    },
-    referrer: "https://leetcode.com/problems/" + questionSlug + "/submissions/",
-    body:
-      '{"operationName":"Submissions","variables":{"offset":0,"limit":100,"lastKey":null,"questionSlug":"' +
-      questionSlug +
-      '"},"query":"query Submissions($offset: Int!, $limit: Int!, $lastKey: String, $questionSlug: String!) {\\n  submissionList(offset: $offset, limit: $limit, lastKey: $lastKey, questionSlug: $questionSlug) {\\n    lastKey\\n    hasNext\\n    submissions {\\n      id\\n      statusDisplay\\n      lang\\n      runtime\\n      timestamp\\n      url\\n      isPending\\n      memory\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n"}',
-    method: "POST",
-    mode: "cors",
-  }).then((response) => {
-    if(response.ok) {
-      return response.json()
-    } else {
-      console.log(response.statusText);
-      // if request failed, resubmit same request
-      return getSubmissionById(questionId);
-    }
-  });
 
+  var makeRequest = async () => {
+    return await fetch("https://leetcode.com/graphql", {
+        credentials: "include",
+        headers: {
+          "User-Agent":
+            window.navigator.userAgent,
+          Accept: "*/*",
+          "Accept-Language": "en-US,en;q=0.5",
+          "content-type": "application/json",
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "same-origin",
+          Cookie:
+            "csrftoken=" + csrftoken + "; LEETCODE_SESSION=" + leetcode_session,
+        },
+        referrer: "https://leetcode.com/problems/" + questionSlug + "/submissions/",
+        body:
+          '{"operationName":"Submissions","variables":{"offset":0,"limit":100,"lastKey":null,"questionSlug":"' +
+          questionSlug +
+          '"},"query":"query Submissions($offset: Int!, $limit: Int!, $lastKey: String, $questionSlug: String!) {\\n  submissionList(offset: $offset, limit: $limit, lastKey: $lastKey, questionSlug: $questionSlug) {\\n    lastKey\\n    hasNext\\n    submissions {\\n      id\\n      statusDisplay\\n      lang\\n      runtime\\n      timestamp\\n      url\\n      isPending\\n      memory\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n"}',
+        method: "POST",
+        mode: "cors",
+      }
+    ).then(async (response) => {
+      if(response.ok) {
+        return response.json();
+      } else {
+        console.log(questionId + " request 429");
+          return await makeRequest();
+      }
+    })
+  };
+
+  var json = await makeRequest();
   return json["data"]["submissionList"]["submissions"];
 }
 
@@ -108,10 +112,11 @@ async function getSubmissions(submissionIds) {
   }
 
   var json = {};
-  promises = []
+  var promises = []
   submissionIds.forEach((e) => {
     if ((e in allProblemStatus) && allProblemStatus[e.toString()]["status"] != null) {
-      promises.push(getSubmissionById(e).then(data => json[e.toString()] = data));
+        backendId = allProblemStatus[e.toString()]["stat"]["question_id"];
+        promises.push(getSubmissionById(backendId).then(data => json[backendId.toString()] = data));
     }
   })
 
