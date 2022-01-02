@@ -20,7 +20,7 @@ async function getCookieValue(cookieName) {
 }
 
 // get submission history of a problem by its id
-async function getSubmissionById(questionId) {
+async function getSubmissionById(frontendId) {
   var csrftoken = await getCookieValue("csrftoken");
   var leetcode_session = await getCookieValue("LEETCODE_SESSION");
 
@@ -28,8 +28,15 @@ async function getSubmissionById(questionId) {
     allProblemStatus = await getUserAllProblemStatus();
   }
 
-  var questionSlug =
-    allProblemStatus[questionId.toString()]["stat"]["question__title_slug"];
+  // console.log(frontendId, allProblemStatus[frontendId.toString()]);
+  try {
+    var backendId = allProblemStatus[frontendId.toString()]["stat"]["question_id"];
+    var questionSlug =
+      allProblemStatus[frontendId.toString()]["stat"]["question__title_slug"];
+  } catch (error) {
+    // console.log(error);
+    // console.log(frontendId, backendId, allProblemStatus[frontendId.toString()]);
+  }
 
   // make http request to get the submission history json
 
@@ -67,6 +74,7 @@ async function getSubmissionById(questionId) {
   };
 
   var json = await makeRequest();
+  // console.log(json)
   return json["data"]["submissionList"]["submissions"];
 }
 
@@ -115,8 +123,7 @@ async function getSubmissions(submissionIds) {
   var promises = []
   submissionIds.forEach((e) => {
     if ((e in allProblemStatus) && allProblemStatus[e.toString()]["status"] != null) {
-        backendId = allProblemStatus[e.toString()]["stat"]["question_id"];
-        promises.push(getSubmissionById(backendId).then(data => json[backendId.toString()] = data));
+        promises.push(getSubmissionById(e).then(data => json[e.toString()] = data));
     }
   })
 
