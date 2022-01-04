@@ -178,138 +178,103 @@ const get_acc_rate = (json_data) => {
   return result;
 };
 
-//const data_acceptance = get_acc_rate(data);
-//export { data_num_sessions, data_acceptance };
-
-/**
- * Script to change Status column to corresponding session count number.
- *
- * Status class notes:
- * * Accepted: text-green-s
- * * Error: text-yellow
- * * Not attempted: text-gray-5
- */
-
-/**
- * Column name modifications.
- *
- * Columns:
- * 1. "Status" -> "Status/# of Sess."
- * 2. new "Your Acceptance"
- * 3. "Acceptance" -> "Public Acceptance"
- */
-var colnames = function (problems_colnames) {
-  var colname_status = problems_colnames.childNodes[0];
-  var colname_title = problems_colnames.childNodes[1];
-  var colname_accept = problems_colnames.childNodes[4];
-  var colname_frequency = problems_colnames.childNodes[5];
-
-  // "Status/# of Sess."
-  colname_status.innerHTML = colname_status.innerHTML.replace(
-    "Status",
-    "Status/# of Sess."
-  );
-
-  // "Your Acceptance"
-  var colname_your_accept = colname_frequency.cloneNode(true);
-  colname_your_accept.innerHTML = colname_your_accept.innerHTML.replace(
-    "Frequency",
-    "Your Acceptance"
-  );
-  problems_colnames.insertBefore(colname_your_accept, colname_title);
-
-  // "Public Acceptance"
-  colname_accept.innerHTML = colname_accept.innerHTML.replace(
-    "Acceptance",
-    "Public Acceptance"
-  );
+var modify_col_titles = () => {
+  create_new_col_headers();
+  create_empty_row_entries();
 };
 
-/**
- * Function to manipulate Status column.
- *
- * For each row:
- * 1. Check if current problem is accepted
- * 2. If accepted, check if current problem is in DATA IMPORTED
- * 3. If is in,
- * 3-1. replace "Status" column value with session count number
- * 3-2. add "Your Acceptance" column value
- * 4. If not in, add empty "Your Acceptance" column value
- *
- * Future update:
- * 1. Construct https://developer.mozilla.org/en-US/docs/Web/API/NodeList live `NodeList` and update when expanding # of problems,
- *    or do other stuff while url does not change per page.
- */
-var eachRow = function (row_element_nodes, data_num_sessions, data_acceptance) {
-  var problem_status = row_element_nodes.childNodes[0];
-  var problem_title = row_element_nodes.childNodes[1];
-  var problem_frequency = row_element_nodes.childNodes[5];
-
-  // Check if accepted
-  var is_accepted =
-    problem_status.childNodes[0].classList.contains("text-green-s");
-  var current_problem = null;
-
-  if (is_accepted) {
-    var title_selector = problem_title.childNodes[0].querySelector(".h-5");
-    if (title_selector != null) {
-      current_problem = title_selector.childNodes[0].textContent;
+var create_new_col_headers = () => {
+  if (
+    document.querySelector(".new_acc_col") ||
+    document.querySelector(".sess_col")
+  ) {
+    return;
+  }
+  var problems_table = document.querySelector("div[role='rowgroup']");
+  var problems_colnames =
+    problems_table.previousSibling.childNodes[0].querySelectorAll(
+      ".overflow-ellipsis"
+    );
+  var status_col;
+  var acc_col;
+  var title_col;
+  for (var e of problems_colnames) {
+    if (e.innerHTML.includes("Status")) {
+      status_col = e;
+      // e.innerHTML = "# Of Times Done";
+    } else if (e.innerHTML.includes("Acceptance")) {
+      acc_col = e;
+      //e.innerHTML = "Public Acceptance";
+    } else if (e.innerHTML.includes("Title")) {
+      title_col = e;
     }
   }
+  var new_acc_col = acc_col.cloneNode(false);
+  new_acc_col.innerHTML = "Personal Acceptance";
+  new_acc_col.classList.add("new_acc_col");
+  title_col.parentNode.insertBefore(new_acc_col, title_col);
 
-  // Check if in DATA IMPORTED
-  var session_count = null;
-  var accept_value = null;
-  if (
-    current_problem != null &&
-    Object.keys(data_num_sessions).includes(current_problem) &&
-    Object.keys(data_acceptance).includes(current_problem)
-  ) {
-    session_count = data_num_sessions[parseInt(current_problem)];
-    accept_value = data_acceptance[parseInt(current_problem)];
-  }
-
-  // Replace "Status" column
-  if (session_count != null) {
-    const session_count_element = document.createElement("span");
-    session_count_element.innerHTML = `&#x2713 ${session_count}`;
-    session_count_element.classList.add("text-olive");
-    session_count_element.classList.add("dark:text-dark-olive");
-
-    problem_status.childNodes[0].replaceWith(session_count_element);
-  }
-
-  // Add "Your Acceptance" value
-  const your_accept_element = problem_frequency.cloneNode(true);
-  if (accept_value != null) {
-    const accept_value_float = parseFloat(accept_value) * 100;
-    your_accept_element.childNodes[0].innerHTML = `<span>${parseInt(
-      accept_value_float
-    )}%</span>`;
-  } else {
-    your_accept_element.childNodes[0].innerHTML = `<span>N/A</span>`;
-  }
-
-  row_element_nodes.insertBefore(your_accept_element, problem_title);
+  var sess_col = acc_col.cloneNode(false);
+  sess_col.innerHTML = "# of Times Done";
+  sess_col.classList.add("sess_col");
+  title_col.parentNode.insertBefore(sess_col, title_col);
 };
 
-/**
- * Run page modification actions.
- */
-var run_page_update = function (data_num_sessions, data_acceptance) {
+var create_empty_row_entries = () => {
   var problems_table = document.querySelector("div[role='rowgroup']");
-  var problems_rows = problems_table.querySelectorAll("div[role='row']");
-  var problems_colnames = problems_table.previousSibling.childNodes[0];
-  colnames(problems_colnames);
-  problems_rows.forEach((element) =>
-    eachRow(element, data_num_sessions, data_acceptance)
-  );
+  var rows = problems_table.querySelectorAll("div[role='row']");
+
+  for (var row of rows) {
+    if (row.querySelector(".acc") || row.querySelector(".sess")) {
+      continue;
+    }
+    var acc_div = document.createElement("div");
+    acc_div.setAttribute(
+      "style",
+      "box-sizing: border-box; flex: 50 0 auto; min-width: 0px; width: 50px;"
+    );
+    var sess_div = document.createElement("div");
+    sess_div.setAttribute(
+      "style",
+      "box-sizing: border-box; flex: 30 0 auto; min-width: 0px; width: 30px;"
+    );
+    acc_div.setAttribute("role", "cell");
+    acc_div.classList.add("acc");
+    acc_div.innerHTML = "";
+    sess_div.setAttribute("role", "cell");
+    sess_div.innerHTML = "";
+    sess_div.classList.add("sess");
+    var title_element = row.querySelectorAll("div[role='cell']")[1];
+    title_element.parentNode.insertBefore(acc_div, title_element);
+    title_element.parentNode.insertBefore(sess_div, title_element);
+  }
+};
+var add_data_to_rows = (data_num_sessions, data_acceptance) => {
+  var i = 0;
+  var qNums = Object.keys(data_num_sessions);
+  var problems_table = document.querySelector("div[role='rowgroup']");
+  var rows = problems_table.querySelectorAll("div[role='row']");
+  for (var row of rows) {
+    var sess_div = row.querySelector(".sess");
+    var acc_div = row.querySelector(".acc");
+    if (!(sess_div && acc_div)) {
+      continue;
+    }
+    sess_div.innerHTML = "";
+    acc_div.innerHTML = "";
+    if (row.querySelector(".h-5").innerHTML.startsWith(qNums[i])) {
+      sess_div.innerHTML = `${data_num_sessions[qNums[i]]}`;
+      acc_div.innerHTML = `${(data_acceptance[qNums[i]] * 100).toFixed(0)}%`;
+      i = i + 1;
+    }
+  }
 };
 
-//NEW changes, get problem numbers every 500ms from DOM.
+//get problem numbers every 500ms from DOM.
 //console.log(Date.now());
 var last_problems_on_page;
 var curr_problems_on_page;
+modify_col_titles();
 setInterval(() => {
   curr_problems_on_page = Array.from(document.querySelectorAll(".h-5"))
     .filter((node) => node.innerHTML.match("\\d+\\.( \\w*)+"))
@@ -317,23 +282,26 @@ setInterval(() => {
       parseInt(node.innerText.substring(0, node.innerText.indexOf(".")))
     );
   if (
+    curr_problems_on_page === undefined ||
+    curr_problems_on_page.length == 0 ||
     JSON.stringify(last_problems_on_page) ==
-    JSON.stringify(curr_problems_on_page)
+      JSON.stringify(curr_problems_on_page)
   ) {
     return;
   }
-  console.log(curr_problems_on_page);
+  console.log("1");
 
-  // getSubmissions(curr_problems_on_page)
-  //   .then((json_data) => {
-  //     console.log("begin");
-  //     return get_acc_rate(json_data);
-  //   }) //get_num_sessions or get_acc_rate
-  //   .then((data) => console.log(data));
-
+  modify_col_titles();
+  console.log("2");
   getSubmissions(curr_problems_on_page).then((json_data) => {
-    console.log("begin");
-    run_page_update(get_num_sessions(json_data), get_acc_rate(json_data));
+    console.log("3");
+    //console.log(curr_problems_on_page);
+    var session_data = get_num_sessions(json_data);
+    var acc_data = get_acc_rate(json_data);
+    console.log(session_data);
+    console.log("4");
+    add_data_to_rows(session_data, acc_data);
+    console.log("5");
   });
 
   last_problems_on_page = curr_problems_on_page;
