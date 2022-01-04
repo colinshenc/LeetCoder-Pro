@@ -142,12 +142,9 @@ const get_num_sessions = (json_data) => {
   var result = {};
   //var json_data = JSON.parse(data);
   for (var qNum in json_data) {
-    //console.log(qNum);
-    //console.log(json_data[qNum]);
     var sub_count = 1;
     var last_ts = json_data[qNum][0];
     for (var sub of json_data[qNum]) {
-      //console.log(sub.timestamp);
       if (Math.abs(last_ts - sub.timestamp) > 86400) {
         sub_count = sub_count + 1;
       }
@@ -157,8 +154,6 @@ const get_num_sessions = (json_data) => {
   }
   return result;
 };
-
-//const data_num_sessions = get_num_sessions(data);
 
 /**
  * Input JSON string-submissions data. Output map with key as question number, value as acceptance rate.
@@ -201,10 +196,8 @@ var create_new_col_headers = () => {
   for (var e of problems_colnames) {
     if (e.innerHTML.includes("Status")) {
       status_col = e;
-      // e.innerHTML = "# Of Times Done";
     } else if (e.innerHTML.includes("Acceptance")) {
       acc_col = e;
-      //e.innerHTML = "Public Acceptance";
     } else if (e.innerHTML.includes("Title")) {
       title_col = e;
     }
@@ -249,9 +242,9 @@ var create_empty_row_entries = () => {
     title_element.parentNode.insertBefore(sess_div, title_element);
   }
 };
+
 var add_data_to_rows = (data_num_sessions, data_acceptance) => {
-  var i = 0;
-  var qNums = Object.keys(data_num_sessions);
+  var qNums = new Set(Object.keys(data_num_sessions));
   var problems_table = document.querySelector("div[role='rowgroup']");
   var rows = problems_table.querySelectorAll("div[role='row']");
   for (var row of rows) {
@@ -262,15 +255,17 @@ var add_data_to_rows = (data_num_sessions, data_acceptance) => {
     }
     sess_div.innerHTML = "";
     acc_div.innerHTML = "";
-    if (row.querySelector(".h-5").innerHTML.startsWith(qNums[i])) {
-      sess_div.innerHTML = `${data_num_sessions[qNums[i]]}`;
-      acc_div.innerHTML = `${(data_acceptance[qNums[i]] * 100).toFixed(0)}%`;
-      i = i + 1;
+    var qNum = row
+      .querySelector(".h-5")
+      .innerHTML.substring(0, row.querySelector(".h-5").innerHTML.indexOf("."));
+    if (qNums.has(qNum)) {
+      sess_div.innerHTML = `${data_num_sessions[qNum]}`;
+      acc_div.innerHTML = `${(data_acceptance[qNum] * 100).toFixed(0)}%`;
     }
   }
 };
 
-//get problem numbers every 500ms from DOM.
+//get problem numbers every 1000ms from DOM.
 //console.log(Date.now());
 var last_problems_on_page;
 var curr_problems_on_page;
@@ -295,7 +290,7 @@ setInterval(() => {
   console.log("2");
   getSubmissions(curr_problems_on_page).then((json_data) => {
     console.log("3");
-    //console.log(curr_problems_on_page);
+    console.log(curr_problems_on_page);
     var session_data = get_num_sessions(json_data);
     var acc_data = get_acc_rate(json_data);
     console.log(session_data);
