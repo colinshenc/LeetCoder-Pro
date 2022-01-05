@@ -1,6 +1,6 @@
 //console.log("HERE");
 chrome.storage.sync.get('buttonState', function (data) {
-  console.log('buttonState', data['buttonState']);
+  //console.log('buttonState', data['buttonState']);
   if (data['buttonState'] == 1) {
     var btn = document.createElement("BUTTON")
     var t = document.createTextNode("CLICK ME");
@@ -29,11 +29,11 @@ chrome.storage.sync.get('buttonState', function (data) {
         JSON.stringify(last_problems_on_page) ==
         JSON.stringify(curr_problems_on_page)
       ) {
+        console.log("return");
         return;
       }
       console.log("1");
-      console.log('buttonState', data['buttonState']);
-
+    
       modify_col_titles();
       console.log("2");
       getSubmissions(curr_problems_on_page).then((json_data) => {
@@ -43,18 +43,19 @@ chrome.storage.sync.get('buttonState', function (data) {
         var acc_data = get_acc_rate(json_data);
         console.log(session_data);
         console.log("4");
+
         add_data_to_rows(session_data, acc_data);
         console.log("5");
-        chrome.storage.sync.set({ 'buttonState': 1 }, function () {
-          console.log('Status saved');
-        })
+        //chrome.storage.sync.set({ 'buttonState': 1 }, function () {
+        //console.log('Status saved');
+        // })
       });
 
       last_problems_on_page = curr_problems_on_page;
     }, 1000);
 
     //data['buttonState'] == 1;
-  
+
   }
   // chrome.tabs.query({ url: "https://leetcode.com/problemset/*" }, function (tab) {
   //    chrome.tabs.reload(tab[0].id)
@@ -182,6 +183,8 @@ async function getSubmissions(submissionIds) {
   if (allProblemStatus == null) {
     allProblemStatus = await getUserAllProblemStatus();
   }
+  chrome.storage.sync.get('buttonState', (data) =>
+  console.log('buttonState', data['buttonState']))
 
   var json = {};
   var promises = [];
