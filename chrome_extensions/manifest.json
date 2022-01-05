@@ -1,23 +1,25 @@
 {
   "name": "LeetCode Extension",
+  "description": "LeetCode Extension",
   "version": "1.0",
-  "manifest_version": 2,
-  "page_action": {
-    "browser_style": true,
-    "default_icon": "/images/LeetCode_logo_shrink.png",
-    "default_popup": "popup.html"
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "/images/logo_on.png"
   },
+  "host_permissions": [
+    "*://*.leetcode.com/"
+  ],
   "permissions": [
-    "*://*.leetcode.com/", "cookies", "storage", "tabs"
+    "cookies", "storage", "tabs"
   ],
   "background": {
-    "scripts": ["utils.js"]
+    "service_worker": "utils.js"
   },
   "content_scripts": [
     {
       "matches": ["*://*.leetcode.com/problemset/*"],
-      "js": ["submission.js"],
-      "run_at": "document_end"
+      "js": ["submission.js"]
     }
   ],
   "commands": {
@@ -25,7 +27,8 @@
       "suggested_key": {
         "default": "Ctrl+Shift+L",
         "mac": "MacCtrl+Shift+L"
-      }
+      },
+      "description": "Open popup.html"
     }
   }
 }
