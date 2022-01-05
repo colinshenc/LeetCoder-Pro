@@ -1,3 +1,7 @@
+chrome.storage.sync.set({"buttonState": 0}, function() {
+  console.log('Status saved');
+})
+
 chrome.runtime.onMessage.addListener (
   (request, sender, sendResponse) => {
     // only handle message from self
