@@ -2,13 +2,6 @@
 chrome.storage.sync.get('buttonState', function (data) {
   //console.log('buttonState', data['buttonState']);
   if (data['buttonState'] == 1) {
-    var btn = document.createElement("BUTTON")
-    var t = document.createTextNode("CLICK ME");
-    btn.appendChild(t);
-    //Appending to DOM 
-    document.body.appendChild(btn);
-
-
     //get problem numbers every 1000ms from DOM.
     //console.log(Date.now());
 
