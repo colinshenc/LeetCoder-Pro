@@ -1,0 +1,16 @@
+button {
+  height: 40px;
+  width: 50px;
+  outline: none;
+  margin-left: 30%;
+  margin-right: 30%;
+  border: black;
+  border-radius: 12px;
+  background-color: blanchedalmond;
+}
+
+h1 {
+  color: blue;
+  font-family: verdana;
+  font-size: 18px;
+}
