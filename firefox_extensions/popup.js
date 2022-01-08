@@ -39,15 +39,4 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
-  
-  let button_help = document.getElementById("help");
-  button_help.addEventListener("click", function () {
-    console.log("clicked help button");
-    browser.tabs.query({ url: "*://*.leetcode.com/*" }, function (tab) {
-      window.open(
-        "https://google.com",
-        "_blank" // <- This is what makes it open in a new window.
-      );
-    });
-  });
 });
