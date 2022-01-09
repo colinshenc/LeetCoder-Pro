@@ -1,4 +1,50 @@
 // this file runs on the web page and cannot access chrome.cookie api
+chrome.storage.sync.get("buttonState", function (data) {
+  //console.log('buttonState', data['buttonState']);
+  if (data["buttonState"] == 1) {
+    //get problem numbers every 1000ms from DOM.
+
+    //get problem numbers every 1000ms from DOM.
+    //console.log(Date.now());
+    var last_problems_on_page;
+    var curr_problems_on_page;
+    modify_col_titles();
+    setInterval(() => {
+      curr_problems_on_page = Array.from(document.querySelectorAll(".h-5"))
+        .filter((node) => node.innerHTML.match("\\d+\\.( \\w*)+"))
+        .map((node) =>
+          parseInt(node.innerText.substring(0, node.innerText.indexOf(".")))
+        );
+      if (
+        curr_problems_on_page === undefined ||
+        curr_problems_on_page.length == 0 ||
+        JSON.stringify(last_problems_on_page) ==
+          JSON.stringify(curr_problems_on_page)
+      ) {
+        return;
+      }
+      console.log("1");
+
+      modify_col_titles();
+      console.log("2");
+      getSubmissions(curr_problems_on_page).then((json_data) => {
+        console.log("3");
+        //console.log(curr_problems_on_page);
+        var session_data = get_num_sessions(json_data);
+        var acc_data = get_acc_rate(json_data);
+        console.log(session_data);
+        console.log("4");
+        add_data_to_rows(session_data, acc_data);
+        console.log("5");
+      });
+
+      last_problems_on_page = curr_problems_on_page;
+    }, 1000);
+  }
+  // chrome.tabs.query({ url: "https://leetcode.com/problemset/*" }, function (tab) {
+  //    chrome.tabs.reload(tab[0].id)
+  //})
+});
 
 var allProblemStatus = null;
 
@@ -289,37 +335,37 @@ var add_data_to_rows = (data_num_sessions, data_acceptance) => {
 
 //get problem numbers every 1000ms from DOM.
 //console.log(Date.now());
-var last_problems_on_page;
-var curr_problems_on_page;
-modify_col_titles();
-setInterval(() => {
-  curr_problems_on_page = Array.from(document.querySelectorAll(".h-5"))
-    .filter((node) => node.innerHTML.match("\\d+\\.( \\w*)+"))
-    .map((node) =>
-      parseInt(node.innerText.substring(0, node.innerText.indexOf(".")))
-    );
-  if (
-    curr_problems_on_page === undefined ||
-    curr_problems_on_page.length == 0 ||
-    JSON.stringify(last_problems_on_page) ==
-      JSON.stringify(curr_problems_on_page)
-  ) {
-    return;
-  }
-  console.log("1");
+// var last_problems_on_page;
+// var curr_problems_on_page;
+// modify_col_titles();
+// setInterval(() => {
+//   curr_problems_on_page = Array.from(document.querySelectorAll(".h-5"))
+//     .filter((node) => node.innerHTML.match("\\d+\\.( \\w*)+"))
+//     .map((node) =>
+//       parseInt(node.innerText.substring(0, node.innerText.indexOf(".")))
+//     );
+//   if (
+//     curr_problems_on_page === undefined ||
+//     curr_problems_on_page.length == 0 ||
+//     JSON.stringify(last_problems_on_page) ==
+//       JSON.stringify(curr_problems_on_page)
+//   ) {
+//     return;
+//   }
+//   console.log("1");
 
-  modify_col_titles();
-  console.log("2");
-  getSubmissions(curr_problems_on_page).then((json_data) => {
-    console.log("3");
-    //console.log(curr_problems_on_page);
-    var session_data = get_num_sessions(json_data);
-    var acc_data = get_acc_rate(json_data);
-    console.log(session_data);
-    console.log("4");
-    add_data_to_rows(session_data, acc_data);
-    console.log("5");
-  });
+//   modify_col_titles();
+//   console.log("2");
+//   getSubmissions(curr_problems_on_page).then((json_data) => {
+//     console.log("3");
+//     //console.log(curr_problems_on_page);
+//     var session_data = get_num_sessions(json_data);
+//     var acc_data = get_acc_rate(json_data);
+//     console.log(session_data);
+//     console.log("4");
+//     add_data_to_rows(session_data, acc_data);
+//     console.log("5");
+//   });
 
-  last_problems_on_page = curr_problems_on_page;
-}, 1000);
+//   last_problems_on_page = curr_problems_on_page;
+// }, 1000);

@@ -1,12 +1,26 @@
+
+body {
+  width: max-content;
+  height: fit-content;
+}
+
 button {
-  height: 40px;
+  height: 30px;
   width: 50px;
   outline: none;
   margin-left: 30%;
   margin-right: 30%;
   border: black;
   border-radius: 12px;
+  font-family:Arial, Helvetica, sans-serif
+}
+
+#switch {
   background-color: blanchedalmond;
+}
+
+#help {
+  background-color: rgb(156, 125, 187);
 }
 
 h1 {
@@ -14,3 +28,4 @@ h1 {
   font-family: verdana;
   font-size: 18px;
 }
+
