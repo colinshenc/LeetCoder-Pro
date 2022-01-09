@@ -1,15 +1,14 @@
-//console.log("HERE");
+// this file runs on the web page and cannot access chrome.cookie api
 chrome.storage.sync.get('buttonState', function (data) {
   //console.log('buttonState', data['buttonState']);
   if (data['buttonState'] == 1) {
     //get problem numbers every 1000ms from DOM.
-    //console.log(Date.now());
 
+    //get problem numbers every 1000ms from DOM.
+    //console.log(Date.now());
     var last_problems_on_page;
     var curr_problems_on_page;
     modify_col_titles();
-    console.log('buttonState', data['buttonState']);
-
     setInterval(() => {
       curr_problems_on_page = Array.from(document.querySelectorAll(".h-5"))
         .filter((node) => node.innerHTML.match("\\d+\\.( \\w*)+"))
@@ -22,32 +21,25 @@ chrome.storage.sync.get('buttonState', function (data) {
         JSON.stringify(last_problems_on_page) ==
         JSON.stringify(curr_problems_on_page)
       ) {
-        console.log("return");
         return;
       }
       console.log("1");
-    
+
       modify_col_titles();
       console.log("2");
       getSubmissions(curr_problems_on_page).then((json_data) => {
         console.log("3");
-        console.log(curr_problems_on_page);
+        //console.log(curr_problems_on_page);
         var session_data = get_num_sessions(json_data);
         var acc_data = get_acc_rate(json_data);
         console.log(session_data);
         console.log("4");
-
         add_data_to_rows(session_data, acc_data);
         console.log("5");
-        //chrome.storage.sync.set({ 'buttonState': 1 }, function () {
-        //console.log('Status saved');
-        // })
       });
 
       last_problems_on_page = curr_problems_on_page;
     }, 1000);
-
-    //data['buttonState'] == 1;
 
   }
   // chrome.tabs.query({ url: "https://leetcode.com/problemset/*" }, function (tab) {
@@ -57,7 +49,6 @@ chrome.storage.sync.get('buttonState', function (data) {
 
 
 
-// this file runs on the web page and cannot access chrome.cookie api
 
 var allProblemStatus = null;
 
@@ -99,7 +90,6 @@ async function getSubmissionById(frontendId) {
   }
 
   // make http request to get the submission history json
-
   var makeRequest = async () => {
     return await fetch("https://leetcode.com/graphql", {
       credentials: "include",
@@ -176,8 +166,6 @@ async function getSubmissions(submissionIds) {
   if (allProblemStatus == null) {
     allProblemStatus = await getUserAllProblemStatus();
   }
-  chrome.storage.sync.get('buttonState', (data) =>
-  console.log('buttonState', data['buttonState']))
 
   var json = {};
   var promises = [];
@@ -246,31 +234,44 @@ var create_new_col_headers = () => {
   ) {
     return;
   }
-  var problems_table = document.querySelector("div[role='rowgroup']");
-  var problems_colnames =
-    problems_table.previousSibling.childNodes[0].querySelectorAll(
-      ".overflow-ellipsis"
-    );
+  var headers = document
+    .querySelector(".border-b.border-divider-border-2")
+    .querySelector("div[role='row']");
+  var status_header = headers.childNodes[0];
+  status_header.setAttribute(
+    "style",
+    "box-sizing:border-box;flex:40 0 auto;min-width:0px;width:40px"
+  );
+
   var status_col;
-  var acc_col;
+  var sol_col;
   var title_col;
-  for (var e of problems_colnames) {
-    if (e.innerHTML.includes("Status")) {
+  for (var e of headers.childNodes) {
+    var e_ = e.querySelector(".overflow-hidden.overflow-ellipsis");
+    if (e_.innerHTML.includes("Status")) {
       status_col = e;
-    } else if (e.innerHTML.includes("Acceptance")) {
-      acc_col = e;
-    } else if (e.innerHTML.includes("Title")) {
+    } else if (e_.innerHTML.includes("Solution")) {
+      sol_col = e;
+    } else if (e_.innerHTML.includes("Title")) {
       title_col = e;
     }
   }
-  var new_acc_col = acc_col.cloneNode(false);
+  var new_acc_col = sol_col.cloneNode(false);
   new_acc_col.innerHTML = "Personal Acceptance";
   new_acc_col.classList.add("new_acc_col");
+  new_acc_col.setAttribute(
+    "style",
+    "box-sizing:border-box;flex:72 0 auto;min-width:0px;width:72px"
+  );
   title_col.parentNode.insertBefore(new_acc_col, title_col);
 
-  var sess_col = acc_col.cloneNode(false);
+  var sess_col = sol_col.cloneNode(false);
   sess_col.innerHTML = "# of Times Done";
   sess_col.classList.add("sess_col");
+  sess_col.setAttribute(
+    "style",
+    "box-sizing:border-box;flex:48 0 auto;min-width:0px;width:48px"
+  );
   title_col.parentNode.insertBefore(sess_col, title_col);
 };
 
@@ -282,20 +283,30 @@ var create_empty_row_entries = () => {
     if (row.querySelector(".acc") || row.querySelector(".sess")) {
       continue;
     }
+
+    var status = row.querySelector("div[role='cell']");
+    status.setAttribute(
+      "style",
+      "box-sizing:border-box;flex:40 0 auto;min-width:0px;width:40px"
+    );
     var acc_div = document.createElement("div");
     acc_div.setAttribute(
       "style",
-      "box-sizing: border-box; flex: 50 0 auto; min-width: 0px; width: 50px;"
+      "box-sizing: border-box; flex: 76 0 auto; min-width: 0px; width: 76px;"
     );
     var sess_div = document.createElement("div");
     sess_div.setAttribute(
       "style",
-      "box-sizing: border-box; flex: 30 0 auto; min-width: 0px; width: 30px;"
+      "box-sizing: border-box; flex: 54 0 auto; min-width: 0px; width: 54px;"
     );
     acc_div.setAttribute("role", "cell");
+    acc_div.classList.add("items-center");
+    acc_div.classList.add("flex");
     acc_div.classList.add("acc");
     acc_div.innerHTML = "";
     sess_div.setAttribute("role", "cell");
+    sess_div.classList.add("items-center");
+    sess_div.classList.add("flex");
     sess_div.innerHTML = "";
     sess_div.classList.add("sess");
     var title_element = row.querySelectorAll("div[role='cell']")[1];
@@ -325,4 +336,3 @@ var add_data_to_rows = (data_num_sessions, data_acceptance) => {
     }
   }
 };
-
