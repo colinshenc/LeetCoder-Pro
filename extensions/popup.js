@@ -1,5 +1,12 @@
+var storageAPI = chrome.storage.sync;
+if(navigator.userAgent.match(/chrome|chromium|crios/i)) {
+  storageAPI = chrome.storage.sync;
+} else if (navigator.userAgent.match(/firefox|fxios/i)) {
+  storageAPI = browser.storage.local;
+}
+
 // Initialize button to based on storage value
-chrome.storage.sync.get('buttonState', function (data) {
+storageAPI.get('buttonState', function (data) {
   let button = document.getElementById("switch");
   console.log('buttonState', data);
   if (data['buttonState'] == 1) {
@@ -24,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
       button.innerHTML = "ON";
       isExtensionOn = 1;
     }
-    chrome.storage.sync.set({ 'buttonState': isExtensionOn }, function () {
+    storageAPI.set({ 'buttonState': isExtensionOn }, function () {
       console.log('Status saved');
     })
     chrome.tabs.query({url: "*://*.leetcode.com/*" }, function (tab) {

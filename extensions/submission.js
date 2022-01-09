@@ -1,5 +1,12 @@
+var storageAPI = chrome.storage.sync;
+if(navigator.userAgent.match(/chrome|chromium|crios/i)) {
+  storageAPI = chrome.storage.sync;
+} else if (navigator.userAgent.match(/firefox|fxios/i)) {
+  storageAPI = browser.storage.local;
+}
+
 // this file runs on the web page and cannot access chrome.cookie api
-chrome.storage.sync.get("buttonState", function (data) {
+storageAPI.get("buttonState", function (data) {
   //console.log('buttonState', data['buttonState']);
   if (data["buttonState"] == 1) {
     //get problem numbers every 1000ms from DOM.

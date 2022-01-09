@@ -11,7 +11,7 @@
     "*://*.leetcode.com/", "cookies", "storage", "tabs"
   ],
   "background": {
-    "service_worker": "utils.js"
+    "scripts": ["utils.js"]
   },
   "content_scripts": [
     {

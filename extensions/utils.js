@@ -1,5 +1,13 @@
+var storageAPI = chrome.storage.sync;
+if(navigator.userAgent.match(/chrome|chromium|crios/i)) {
+  storageAPI = chrome.storage.sync;
+} else if (navigator.userAgent.match(/firefox|fxios/i)) {
+  storageAPI = browser.storage.local;
+}
+
+
 chrome.runtime.onInstalled.addListener(()=> {
-  chrome.storage.sync.set({'buttonState': 0}, function() {
+  storageAPI.set({'buttonState': 0}, function() {
     console.log('Status saved');
   })
 })
@@ -16,7 +24,6 @@ chrome.runtime.onMessage.addListener (
         // keep sendResponse channel open
         return true;
     }
-   
   }
 );
 
