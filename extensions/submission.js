@@ -114,7 +114,7 @@ async function getSubmissionById(frontendId) {
       if (response.ok) {
         return response.json();
       } else {
-        console.log(frontendId + " request 429");
+        console.log("problem " + frontendId + " request failed");
         return await makeRequest();
       }
     });
