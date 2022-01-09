@@ -82,15 +82,10 @@ async function getSubmissionById(frontendId) {
   }
 
   // console.log(frontendId, allProblemStatus[frontendId.toString()]);
-  try {
-    var backendId =
-      allProblemStatus[frontendId.toString()]["stat"]["question_id"];
-    var questionSlug =
-      allProblemStatus[frontendId.toString()]["stat"]["question__title_slug"];
-  } catch (error) {
-    // console.log(error);
-    // console.log(frontendId, backendId, allProblemStatus[frontendId.toString()]);
-  }
+  var backendId =
+    allProblemStatus[frontendId.toString()]["stat"]["question_id"];
+  var questionSlug =
+    allProblemStatus[frontendId.toString()]["stat"]["question__title_slug"];
 
   // make http request to get the submission history json
   var makeRequest = async () => {
