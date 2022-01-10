@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
     storageAPI.set({ 'buttonState': isExtensionOn }, function () {
       console.log('Status saved');
     })
-    chrome.tabs.query({url: "*://*.leetcode.com/*" }, function (tab) {
+    chrome.tabs.query({url: "*://*.leetcode.com/problemset/*" }, function (tab) {
       // If the page is not opened
       console.log(tab);
       if (tab[0] == null) {
