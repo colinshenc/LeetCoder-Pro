@@ -11,6 +11,7 @@ storageAPI.get('buttonState', function (data) {
   console.log('buttonState', data);
   if (data['buttonState'] == 1) {
     button.innerHTML = "ON";
+    button.style.backgroundColor = "rgba(35, 228, 60, 0.904)";
   }
   else {
     button.innerHTML = "OFF";
@@ -26,10 +27,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (button.innerHTML == "ON") {
       button.innerHTML = "OFF";
       isExtensionOn = 0;
+      button.style.backgroundColor = "blanchedalmond";
     }
     else {
       button.innerHTML = "ON";
       isExtensionOn = 1;
+      button.style.backgroundColor = "rgba(35, 228, 60, 0.904)";
     }
     storageAPI.set({ 'buttonState': isExtensionOn }, function () {
       console.log('Status saved');
