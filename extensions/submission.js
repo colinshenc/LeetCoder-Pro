@@ -65,7 +65,7 @@ async function getCookieValue(cookieName) {
         if (response) {
           resolve(response);
         } else {
-          reject("Cannot find cookie " + cookieName);
+          throw "Cannot find cookie " + cookieName;
         }
       }
     );
