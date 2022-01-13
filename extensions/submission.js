@@ -10,9 +10,6 @@ storageAPI.get("buttonState", function (data) {
   //console.log('buttonState', data['buttonState']);
   if (data["buttonState"] == 1) {
     //get problem numbers every 1000ms from DOM.
-
-    //get problem numbers every 1000ms from DOM.
-    //console.log(Date.now());
     var last_problems_on_page;
     var curr_problems_on_page;
     // modify_col_titles();
