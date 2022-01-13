@@ -1,5 +1,5 @@
 var storageAPI = chrome.storage.sync;
-if(navigator.userAgent.match(/chrome|chromium|crios/i)) {
+if (navigator.userAgent.match(/chrome|chromium|crios/i)) {
   storageAPI = chrome.storage.sync;
 } else if (navigator.userAgent.match(/firefox|fxios/i)) {
   storageAPI = browser.storage.local;
@@ -15,7 +15,7 @@ storageAPI.get("buttonState", function (data) {
     //console.log(Date.now());
     var last_problems_on_page;
     var curr_problems_on_page;
-    modify_col_titles();
+    // modify_col_titles();
     setInterval(() => {
       curr_problems_on_page = Array.from(document.querySelectorAll(".h-5"))
         .filter((node) => node.innerHTML.match("\\d+\\.( \\w*)+"))
@@ -32,7 +32,7 @@ storageAPI.get("buttonState", function (data) {
       }
       console.log("1");
 
-      modify_col_titles();
+      // modify_col_titles();
       console.log("2");
       getSubmissions(curr_problems_on_page).then((json_data) => {
         console.log("3");
@@ -41,6 +41,7 @@ storageAPI.get("buttonState", function (data) {
         var acc_data = get_acc_rate(json_data);
         console.log(session_data);
         console.log("4");
+        modify_col_titles();
         add_data_to_rows(session_data, acc_data);
         console.log("5");
       });
