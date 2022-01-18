@@ -10,10 +10,10 @@
   - ```submission.js```: Script that asynchronously fetch submission data from LeetCode using browser's cookies API```getSubmissions()```. After getting the data, processing them and generating data points to be displayed on LeetCode's problems page. Finally display the data inside two columns added on the page.
 
 ***Contributors***
-- Vincenqwu(https://github.com/Vincenqwu)
-- twaddwa(https://github.com/twaddwa)
-- AnnieNew(https://github.com/AnnieNew)
-- Cheng Shen(https://github.com/colinshenc)
+- Vincenqwu(https://github.com/Vincenqwu):research extension publication process,extension pop-up page,extension control logic.
+- twaddwa(https://github.com/twaddwa):HTTP request, async retrieve submission data from LeetCode API,adapt code for both firefox and chrome platforms.
+- AnnieNew(https://github.com/AnnieNew): research extension publication process,design demo images,gifs for chrome store publication.
+- Cheng Shen(https://github.com/colinshenc): project proposition,stats conversion from retrieved LeetCode submission data,data display on webpage,DOM manipulation. 
 
 ![alt text](https://github.com/colinshenc/Leetcode_familiarity_add_on/blob/main/extensions/images/logo6.png)
 
