@@ -17,5 +17,7 @@
 
 ![alt text](https://github.com/colinshenc/Leetcode_familiarity_add_on/blob/main/extensions/images/logo6.png)
 
+***How to use LeetCoder Pro***
+- <h3>Note:To enable this extension, please log into (or register) your LeetCode account. In order to show data you must have submitted solutions before.</h3>
 > Written by Cheng Shen with [StackEdit](https://stackedit.io/).
-> Jan 6, 2022
+> Jan 21, 2022
