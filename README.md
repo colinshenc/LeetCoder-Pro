@@ -11,7 +11,7 @@
 
 ***Contributors***
 - Vincenqwu(https://github.com/Vincenqwu): research extension publication process,extension pop-up page,extension control logic.
-- twaddwa(https://github.com/twaddwa): HTTP request, async retrieve submission data from LeetCode API,adapt code for both firefox and chrome platforms.
+- zzarc(github.com/zzarc): HTTP request, async retrieve submission data from LeetCode API,adapt code for both firefox and chrome platforms.
 - AnnieNew(https://github.com/AnnieNew): research extension publication process,design demo images,gifs for chrome store publication.
 - Cheng Shen(https://github.com/colinshenc): project proposition,stats conversion from retrieved LeetCode submission data,data display and update on webpage,DOM manipulation. 
 
